@@ -19,7 +19,27 @@ header{left:24px;top:94px;gap:6px;max-width:calc(100vw - 48px)}button,select{col
 #task-panel{position:absolute;right:24px;top:154px;width:200px;z-index:3;display:none;padding:16px;background:#0b2231ed;border:1px solid #2d4d5b;border-radius:10px;backdrop-filter:blur(15px);color:#91b2bf;font-size:10px}#task-panel .task-label{color:#6dbcb6;font-size:9px;letter-spacing:1px}#task-mode{font-size:20px;color:#d8f1ed;margin:8px 0 14px}#task-panel p{display:flex;justify-content:space-between;gap:6px;font-size:10px;margin:10px 0}#task-panel b{font-weight:400;color:#bad9df}#mini-wells{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;margin:16px 0 10px}#mini-wells span{height:10px;background:#213b47;border-radius:2px}#task-panel small{font-size:9px;color:#638a9c}.film #task-panel{display:none!important}
 @media(max-width:1050px){.masthead{height:68px;padding:0 22px}.wordmark{font-size:16px}.wordmark small{font-size:8px}header{top:82px}#inspector,.browsing #inspector{top:136px;width:260px;padding:18px}#scene-status{font-size:10px;max-width:340px}#operation-context{display:none}#operation-title{font-size:14px}#controls{gap:7px}#operation-strip{padding:11px 14px}}
 @media(max-width:700px){.masthead{padding:0 14px}.wordmark small{letter-spacing:.7px}#scene-status{max-width:150px;font-size:9px}header{left:14px;right:14px;top:82px;max-width:none;gap:4px}button,select{padding:7px 9px}#follow{margin-left:0}#inspector,.browsing #inspector{top:170px;right:14px;width:240px;max-height:calc(100vh - 280px)}#controls{left:12px;right:12px;padding:9px}#operation-strip{left:12px;right:12px;bottom:84px}#play{min-width:80px}.nav-help{left:14px;font-size:9px}.wordmark{font-size:14px}}
-</style></head><body><div class="masthead"><div class="wordmark">CELL <em>ATELIER</em><small>AUTOMATED CULTURE / INTERACTIVE LAB</small></div><div id="scene-status">自由浏览 · 10 台设备</div></div><div id="stage"></div><canvas id="hud"></canvas><header><button id="home">全局</button><button id="nav-rotate" class="active">旋转</button><button id="nav-pan">平移</button><button id="nav-in" aria-label="放大">＋</button><button id="nav-out" aria-label="缩小">−</button><button id="follow">全流程演示</button><select id="scenario"><option value="recovery">设备等待与恢复</option><option value="normal">正常运行</option><option value="review">细胞状态待复核</option></select><button id="approve">模拟人工复核通过</button></header><div class="nav-help">左键旋转 · 右键平移 · 滚轮缩放 · 点击编号或仪器查看</div><aside id="task-panel"><div class="task-label">TASK / HepG2 · 48孔</div><div id="task-mode"></div><p>明场<b id="task-image"></b></p><p>生化<b id="task-biochem"></b></p><div id="mini-wells"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><small>模拟状态与分组响应</small></aside><aside id="inspector"></aside><section id="operation-strip" aria-label="操作步骤"><div class="action-line"><span id="operation-context"></span><span id="operation-title"></span></div><nav id="milestones" aria-label="步骤定位"></nav></section><footer id="controls"><button id="play">播放主线</button><button id="restart">从头</button><input id="seek" type="range" min="0" max="450" step="0.05" value="0" aria-label="播放进度"><span id="time">0:00 / 7:30</span><select id="speed"><option value=".5">0.5倍</option><option value="1" selected>1倍</option><option value="1.5">1.5倍</option></select><a href="video.html?revision=20261109-hatch">视频</a></footer><script>/**
+/* Experience refinement: scene first, compact contextual tools. */
+:root{--muted:#a4bdc9;--panel:#0d202deb;--radius:12px;--space:20px}
+::selection{color:#071d25;background:#9ae8dc}*{scrollbar-width:thin;scrollbar-color:#527482 #0d202b}
+.masthead{height:64px;padding:0 24px;background:#081824ed;border-bottom-color:#233c49}
+.wordmark{font-size:16px;letter-spacing:2px}.wordmark small{color:#a0bbc9;font-size:9px;letter-spacing:.7px}
+#scene-status{color:#b7cfd7}#scene-status:before{box-shadow:none}
+header{top:80px}button,select{min-height:36px;border-radius:6px}button:disabled{opacity:.55}
+#inspector,.browsing #inspector{top:132px;width:270px;padding:20px;background:var(--panel);border:0;box-shadow:0 18px 48px #0006;max-height:calc(100vh - 234px)}
+#inspector h2{font-size:20px;margin:12px 0 16px}#inspector p{color:#c0d2da;line-height:1.8}#inspector small{color:#a1ccc9;line-height:1.7}
+#bank-demo,#spin-section{width:100%;margin-top:10px;text-align:center;color:#c5e5e4;border-color:#40616b;background:#193441}
+#controls{border:0;box-shadow:0 10px 32px #0005;background:#0d202df2;padding:10px 12px;gap:10px}
+#task-panel{top:132px;width:178px;padding:14px;border:0;background:var(--panel)}#task-panel small{color:#a2bfcc}#task-mode{font-size:18px}
+#operation-strip{border:0;box-shadow:0 10px 28px #0004;background:#0d202df2}
+#operation-context{color:#9ed8d0}#operation-title{font-size:14px}#milestones{gap:4px}
+#milestones button{color:#b5cbd5;border:0;background:transparent;min-height:30px;padding:5px 8px;border-radius:4px}#milestones button.current{color:#d0fff4;background:#20464a;box-shadow:inset 0 -2px #88d8c8}#milestones button.done{color:#b9dbd9}#milestones button span{opacity:1;color:#95b7be}
+.nav-help{color:#b1c9d4}#restart{color:#bad2db}.wordmark small{display:none}
+#equipment-list{max-width:150px}#bank-status{font-size:11px;color:#b9d5dc;line-height:1.6;margin-top:12px}
+@media(max-width:1050px){#inspector,.browsing #inspector{width:250px;padding:18px}#scene-status{max-width:270px}#equipment-list{max-width:128px}}
+@media(max-width:700px){.masthead{height:56px;padding:0 14px}.wordmark{font-size:14px}header{top:68px;gap:5px}#scene-status{font-size:10px;max-width:160px}#inspector,.browsing #inspector{top:160px;right:12px;width:228px;max-height:calc(100vh - 260px);padding:16px}#task-panel{right:12px;top:160px;width:150px}#operation-title{font-size:12px}#milestones button{min-height:34px}#controls{flex-wrap:wrap;gap:6px}#seek{min-width:70px}#time{font-size:10px}#equipment-list{max-width:120px}button,select{min-height:38px}.nav-help{max-width:60vw;line-height:1.6}}
+@media(prefers-reduced-motion:reduce){button,select{transition:none}}
+</style></head><body><div class="masthead"><div class="wordmark">CELL <em>ATELIER</em><small>AUTOMATED CULTURE / INTERACTIVE LAB</small></div><div id="scene-status">自由浏览 · 10 台设备</div></div><div id="stage"></div><canvas id="hud"></canvas><header><button id="home">全局</button><button id="nav-rotate" class="active">旋转</button><button id="nav-pan">平移</button><button id="nav-in" aria-label="放大">＋</button><button id="nav-out" aria-label="缩小">−</button><button id="follow">全流程演示</button><select id="equipment-list" aria-label="选择仪器"><option value="">选择仪器</option></select><select id="scenario" aria-label="演示情景"><option value="recovery">设备等待与恢复</option><option value="normal">正常运行</option><option value="review">细胞状态待复核</option></select><button id="approve">模拟人工复核通过</button></header><div class="nav-help">左键旋转 · 右键平移 · 滚轮缩放 · 点击编号或仪器查看</div><aside id="task-panel"><div class="task-label">TASK / HepG2 · 48孔</div><div id="task-mode"></div><p>明场<b id="task-image"></b></p><p>生化<b id="task-biochem"></b></p><div id="bank-status">冻存交接：未安排</div><div id="mini-wells"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><small>模拟状态与分组响应</small></aside><aside id="inspector"></aside><section id="operation-strip" aria-label="操作步骤"><div class="action-line"><span id="operation-context"></span><span id="operation-title"></span></div><nav id="milestones" aria-label="步骤定位"></nav></section><footer id="controls"><button id="play">播放主线</button><button id="restart">从头</button><input id="seek" type="range" min="0" max="450" step="0.05" value="0" aria-label="播放进度"><span id="time">0:00 / 7:30</span><select id="speed" aria-label="播放速度"><option value=".5">0.5倍</option><option value="1" selected>1倍</option><option value="1.5">1.5倍</option></select><a href="video.html?revision=20261110-transfer">视频</a></footer><script>/**
  * @license
  * Copyright 2010-2021 Three.js Authors
  * SPDX-License-Identifier: MIT
@@ -1075,7 +1095,7 @@ header{left:24px;top:94px;gap:6px;max-width:calc(100vw - 48px)}button,select{col
 'use strict';
 const $=id=>document.getElementById(id),clone=x=>JSON.parse(JSON.stringify(x)),V=(x,y,z)=>new THREE.Vector3(x,y,z);
 const scene=new THREE.Scene();scene.background=new THREE.Color('#dce5e9');scene.fog=new THREE.Fog('#dce5e9',35,80);
-const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(1);renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.75;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;$('stage').appendChild(renderer.domElement);
+const renderer=new THREE.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(1);renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.75;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;$('stage').appendChild(renderer.domElement);renderer.domElement.setAttribute('role','img');renderer.domElement.setAttribute('aria-label','自动化细胞实验室。拖动旋转，滚轮缩放，点击设备查看近景。');
 const camera=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.05,120),controls=new THREE.OrbitControls(camera,renderer.domElement);controls.enableDamping=false;controls.maxPolarAngle=Math.PI*.49;controls.minDistance=1.5;controls.maxDistance=45;
 scene.add(new THREE.HemisphereLight(0xf0fbff,0x657986,.45));const light=new THREE.DirectionalLight(0xffffff,1.0);light.position.set(3,18,10);light.castShadow=true;light.shadow.mapSize.set(2048,2048);Object.assign(light.shadow.camera,{left:-17,right:17,top:14,bottom:-14});light.shadow.bias=-.001;scene.add(light);const fill=new THREE.DirectionalLight(0xe5f7ff,.35);fill.position.set(-12,7,-4);scene.add(fill);
 const mat=(c,metal=.05,rough=.5,opacity=1)=>new THREE.MeshStandardMaterial({color:c,metalness:metal,roughness:rough,envMapIntensity:.28,transparent:opacity<1,opacity,depthWrite:opacity===1});
@@ -1095,7 +1115,7 @@ const tipGlass=new THREE.MeshPhysicalMaterial({color:0xdceaf1,metalness:0,roughn
 const wellWall=new THREE.MeshPhysicalMaterial({color:0xa7bfc9,metalness:0,roughness:.22,transparent:true,opacity:.62,side:THREE.DoubleSide,depthWrite:false,clearcoat:.8});
 const plateDeck=mat('#c2d3d9',.06,.22,.78);
 
-box(scene,24,.15,15,0,-.12,0,mat('#cbd7dd'));box(scene,24,5.5,.12,0,2.6,-6.0,mat('#e7eeef'));box(scene,.12,5.5,12,-11.8,2.6,0,mat('#e7eeef'));box(scene,.12,5.5,12,11.8,2.6,0,mat('#e7eeef'));
+box(scene,24,.15,15,0,-.12,0,mat('#cbd7dd'));box(scene,24,5.5,.12,0,2.6,-6.0,mat('#e7eeef'));box(scene,.12,5.5,6.9,-11.8,2.6,-2.55,mat('#e7eeef'));box(scene,.12,5.5,12,11.8,2.6,0,mat('#e7eeef'));
 
 // Continuous epoxy floor, a service wall and high-level building services.
 box(scene,23.5,.006,12.4,0,-.035,.1,mat('#b8c5cd',.23,.30));box(scene,23,.13,.13,0,.03,-5.85,M.steel);
@@ -1105,11 +1125,11 @@ for(let x=-9;x<10;x+=3){box(scene,1.1,.45,.035,x,.72,-5.89,M.white);for(let j=0;
 const zones=[{name:'01  接收与复苏',x:-7.3,w:7,c:'#b9cbdc'},{name:'02  受控培养操作',x:-.5,w:6.4,c:'#aed3ca'},{name:'03  终点制样与检测',x:6.9,w:7.6,c:'#dcc9a9'}];
 zones.forEach(a=>{box(scene,a.w,.014,10.4,a.x,-.025,-.15,mat(a.c,.02,.8,.35));let l=text(scene,a.name,a.w*.6,.40,a.x,.015,5.35,{color:'#345262',bg:a.c,size:26});l.rotation.x=-Math.PI/2;});
 // The perimeter is a proposed shared enclosure; instrument maintenance doors face outwards.
-for(let x of [-10.5,10.5]){for(let z of [-5,5])box(scene,.055,4.3,.055,x,2.15,z,M.steel);box(scene,.055,.055,10,x,4.3,0,M.steel);box(scene,.012,3.8,9.7,x,2.12,0,M.glass);}for(let x of [-10.5,-4,3,10.5])box(scene,.055,4.3,.055,x,2.15,-5,M.steel);box(scene,21,.055,.055,0,4.3,-5,M.steel);
+for(let x of [-10.5,10.5]){for(let z of [-5,5])box(scene,.055,4.3,.055,x,2.15,z,M.steel);box(scene,.055,.055,10,x,4.3,0,M.steel);if(x>0)box(scene,.012,3.8,9.7,x,2.12,0,M.glass);else{box(scene,.012,3.8,6.70,x,2.12,-1.5,M.glass);box(scene,.012,3.8,1.60,x,2.12,4.05,M.glass);box(scene,.012,.88,1.40,x,.66,2.55,M.glass);box(scene,.012,1.25,1.40,x,3.395,2.55,M.glass);}}for(let x of [-10.5,-4,3,10.5])box(scene,.055,4.3,.055,x,2.15,-5,M.steel);box(scene,21,.055,.055,0,4.3,-5,M.steel);
 const DEFS={
- intake:{n:'01',name:'接收与身份核对',ref:'封闭上样位 · 配套集成',x:-9,z:2.8,type:'intake',zone:0,about:'人员放入封闭冻存管。外表面处理与身份登记完成后，任务接受这支原管。'},
+ intake:{n:'01',name:'细胞传递窗',ref:'外侧交接 / 内侧取放 · 集成示意',x:-9,z:2.8,type:'intake',zone:0,about:'人员从外侧放入封闭冻存管，关门后由内侧托盘送给机械臂。待冻存细胞沿相反方向交出，人员取走并完成后续冻存。两侧门依次开启，样本状态和交接记录分别保存。'},
  thaw:{n:'02',name:'无水复苏',ref:'ThawSTAR CFT2 · 结构参考',x:-6.6,z:3.25,type:'thaw',zone:0,about:'原管从顶部竖直插入并轻压触发。完成提示后原管抬升，机械臂夹住管身取出。机器人适配与完成识别属于集成验证项。'},
- spin:{n:'03',name:'机器人上样离心机',ref:'Hettich ROTANTA 460 Robotic',x:-3.5,z:3.4,type:'spin',zone:0,about:'事先核验的样本与配平组合通过小型上样口装入。转子定位、锁盖、运行和停稳分别确认，随后取回原样本管。'},
+ spin:{n:'03',name:'机器人上样离心机',ref:'Hettich ROTANTA 460 Robotic',x:-3.5,z:3.4,type:'spin',zone:0,about:'转子连接四个可摆动吊篮，吊篮内装多孔适配器。样本管与配平管进入登记孔位，停稳后由同一开口取回。结构参考 4444 转子、4490-R/4 吊篮与 4492 适配器；模型比例用于演示。'},
  inc:{n:'04',name:'自动培养箱',ref:'Thermo Cytomat · 交接侧',x:-6.5,z:-3.55,type:'inc',zone:1,about:'前方交接托盘伸出后接板。托盘回仓、门关闭，内部托架将培养板送到登记层位。状态检查决定继续培养或进入后续操作。'},
  culture:{n:'05',name:'培养液体工作站',ref:'Hamilton STAR 类 · 围护内台面',x:-2.5,z:-3.55,type:'liquid',zone:1,about:'8通道头安装在横梁上。培养板放入固定巢位，独立开盖机构保存原盖，移液头从吸头盒取新吸头并将废物送到专用入口。'},
  count:{n:'06',name:'板式细胞计数',ref:'Cellaca MX · 可选 API 集成',x:1.15,z:-3.55,type:'counter',zone:1,about:'独立计数样本进入专用计数耗材。前方载台接收计数板，软件接口返回计数和质量信息，用于核对接种需求。'},
@@ -1167,8 +1187,8 @@ for(let [id,q]of Object.entries(DEFS)){const d={...q,id,flip:q.z>0},g=group(scen
   for(let x of [-.462,.462])box(shell,.044,.032,.968,x,2.482,.56,M.dark);
   for(let z of [.098,1.022])box(shell,.88,.032,.044,0,2.482,z,M.dark);
   const lining=mat('#9bafb8',.60,.33);lining.side=THREE.DoubleSide;
-  const cavity=new THREE.Mesh(new THREE.CylinderGeometry(1.20,1.20,1.55,64,1,true),lining);
-  cavity.position.y=1.40;shell.add(cavity);cyl(shell,1.20,.05,0,.60,0,M.steel);
+  const cavity=new THREE.Mesh(new THREE.CylinderGeometry(1.25,1.25,1.55,64,1,true),lining);
+  cavity.position.y=1.40;shell.add(cavity);cyl(shell,1.25,.05,0,.60,0,M.steel);
   for(let x of [-.46,.46])box(shell,.04,.16,.88,x,2.30,.56,lining);
   for(let z of [.10,1.02])box(shell,.88,.16,.04,0,2.30,z,lining);
   badge(g,'Hettich','ROTANTA 460 Robotic',-.35,1.96,1.42,1.15);
@@ -1181,22 +1201,73 @@ for(let [id,q]of Object.entries(DEFS)){const d={...q,id,flip:q.z>0},g=group(scen
   box(d.hatch,.22,.035,.035,0,.050,.85,M.steel);
   for(let x of [-.34,.34]){let hinge=cyl(g,.05,.17,x,2.515,.08,M.steel);hinge.rotation.z=Math.PI/2;}
   d.apertureLamp=new THREE.PointLight(0xd1e8ec,.40,2.8);d.apertureLamp.position.set(0,2.08,.94);g.add(d.apertureLamp);
-  d.rotor=group(g,0,1.30,0);cyl(d.rotor,.15,.22,0,-.09,0,M.steel);
-  // Open adapters with a real bottom at the tube handoff height with clearance beneath the roof.
-  for(let a of [0,Math.PI/2,Math.PI,Math.PI*1.5]){
-   let x=Math.sin(a)*.56,z=Math.cos(a)*.56;
-   let arm=box(d.rotor,.10,.08,.60,x/2,-.08,z/2,M.steel);arm.rotation.y=a;
-   const bucket=group(d.rotor,x,0,z),wall=new THREE.Mesh(new THREE.CylinderGeometry(.17,.15,.24,32,1,true),lining);
-   wall.position.y=.19;bucket.add(wall);cyl(bucket,.15,.02,0,.06,0,M.dark);
-   const ring=new THREE.Mesh(new THREE.TorusGeometry(.164,.013,8,32),M.steel);ring.rotation.x=Math.PI/2;ring.position.y=.31;bucket.add(ring);
-   // Two-sided adapters leave the closed tube visible above the cup.
+
+  d.rotor=group(g,0,1.78,0);cyl(d.rotor,.19,.25,0,-.07,0,M.steel);cyl(d.rotor,.10,.065,0,.085,0,M.dark);d.buckets=[];
+  const insertMat=mat('#61767e',.12,.52),innerMat=mat('#162b34',.25,.5);innerMat.side=THREE.DoubleSide;
+  for(let k=0;k<4;k++){
+   const a=k*Math.PI/2,radial=group(d.rotor);radial.rotation.y=a;
+   rounded(radial,.19,.14,.32,0,-.02,.18,M.steel,.025);
+   for(let x of [-.24,.24]){box(radial,.065,.12,.50,x,-.02,.35);box(radial,.24,.12,.07,x/2,-.02,.17,M.steel);let pin=cyl(radial,.045,.10,x,0,.58,M.dark);pin.rotation.z=Math.PI/2;}
+   const pivot=group(radial,0,0,.58);d.buckets.push(pivot);
+   rounded(pivot,.42,.045,.54,0,-.55,0,M.steel,.025);
+   for(let x of [-.20,.20])box(pivot,.02,.53,.54,x,-.27,0,M.steel);
+   for(let z of [-.26,.26])box(pivot,.40,.53,.02,0,-.27,z,M.steel);
+   const sh=new THREE.Shape();sh.moveTo(-.195,-.25);sh.lineTo(.195,-.25);sh.lineTo(.195,.25);sh.lineTo(-.195,.25);sh.closePath();
+   for(let ix=0;ix<3;ix++)for(let iz=0;iz<4;iz++){
+    let x=(ix-1)*.13,z=(iz-1.5)*.13,r=.054,hole=new THREE.Path();hole.absarc(x,-z,r,0,Math.PI*2,true);sh.holes.push(hole);
+    let bore=new THREE.Mesh(new THREE.CylinderGeometry(r,r*.96,.46,24,1,true),innerMat);bore.position.set(x,-.28,z);pivot.add(bore);cyl(pivot,r*.96,.012,x,-.516,z,M.dark);
+   }
+   const top=new THREE.Mesh(new THREE.ShapeGeometry(sh),insertMat);top.rotation.x=-Math.PI/2;top.position.y=-.05;pivot.add(top);
+   for(let x of [-.185,.185])box(pivot,.015,.02,.48,x,-.035,0,M.dark);
   }
-  for(let [key,off]of [['rotor0',0],['rotor1',Math.PI]])holders[key]=s=>local(d,.56*Math.sin(s.rotor+off),1.37,.56*Math.cos(s.rotor+off));
+  for(let [key,off]of [['rotor0',0],['rotor1',Math.PI]])holders[key]=s=>{
+   const swing=s.swing||0,a=s.rotor+off,yy=-.51,zz=-.065;
+   const radial=.58-yy*Math.sin(swing)+zz*Math.cos(swing),y=1.78+yy*Math.cos(swing)+zz*Math.sin(swing);
+   return local(d,radial*Math.sin(a),y,radial*Math.cos(a));
+  };
+
  }
- if(d.type==='intake'){bench(g,1.75,1.5);box(g,1.7,1.05,.045,0,1.75,-.70,M.glass);d.intakeLid=group(g,0,2.29,-.70);box(d.intakeLid,1.7,.05,1.45,0,0,.70,M.clear);for(let x of [-.83,.83])box(g,.04,1.1,1.45,x,1.75,0,M.glass);badge(g,'SAMPLE IN','ID / ACCESS',0,2.09,.76,.55);holders.intake=()=>local(d,0,1.23,.25);cyl(g,.11,.10,0,1.19,.25,M.dark);}
+
+ if(d.type==='intake'){
+  const pass=group(scene);d.pass=pass;
+  // Chamber crosses the glazed boundary at x=-10.5. The tray exits to x=-9.
+  rounded(pass,1.88,.12,1.42,-10.72,1.16,2.55,M.steel,.03);
+  rounded(pass,1.88,.10,1.42,-10.72,2.65,2.55,M.white,.03);
+  for(let z of [1.85,3.25])box(pass,1.88,1.43,.035,-10.72,1.91,z,M.glass);
+  for(let x of [-11.66,-9.78]){
+   for(let z of [1.85,3.25])box(pass,.07,2.80,.07,x,2.61,z,M.steel);
+   box(pass,.07,.07,1.47,x,4.01,2.55,M.steel);
+   box(pass,.14,.05,1.3,x,1.21,2.55,M.dark);
+  }
+  // Doors lift into their own upper guides, independently of the sliding tray.
+  const pane=()=>{const q=group(pass);box(q,.04,1.35,1.30,0,0,0,M.clear);for(let z of [-.64,.64])box(q,.055,1.36,.035,0,0,z,M.steel);for(let y of [-.66,.66])box(q,.055,.035,1.30,0,y,0,M.steel);return q;};
+  d.outerDoor=pane();d.innerDoor=pane();
+  d.outerDoor.position.set(-11.66,1.91,2.55);d.innerDoor.position.set(-9.78,1.91,2.55);
+  d.passTray=group(pass,-10.8,1.23,2.55);rounded(d.passTray,.80,.045,.68,0,-.025,0,M.steel,.02);
+  for(let z of [-.3,.3])box(d.passTray,.8,.055,.028,0,.015,z,M.dark);
+  for(let z of [2.25,2.85])box(pass,2.0,.035,.035,-9.9,1.17,z,M.steel);
+  const socketMat=M.dark.clone();socketMat.side=THREE.DoubleSide;
+  let socket=new THREE.Mesh(new THREE.CylinderGeometry(.093,.088,.08,24,1,true),socketMat);socket.position.y=.04;d.passTray.add(socket);cyl(d.passTray,.088,.012,0,-.006,0,M.dark);
+  for(let x of [-11.5,-9.9])for(let z of [1.98,3.12])box(pass,.065,1.1,.065,x,.58,z,M.steel);
+  d.outLamp=box(pass,.025,.065,.38,-11.70,2.76,2.55,M.teal.clone());d.inLamp=box(pass,.025,.065,.38,-9.73,2.76,2.55,M.teal.clone());
+  const glove=mat('#88c8dc',.01,.75),sleeve=mat('#dae2e6',.01,.9);
+  d.hand=group(scene);
+  const soft=(x,y,z,sx,sy,sz,m)=>{const q=new THREE.Mesh(new THREE.SphereGeometry(1,20,12),m);q.position.set(x,y,z);q.scale.set(sx,sy,sz);d.hand.add(q);return q;};
+  const digit=(a,b,r,m)=>{const v=V(...b).sub(V(...a)),q=cyl(d.hand,r,v.length(),...(V(...a).add(V(...b)).multiplyScalar(.5).toArray()),m);q.quaternion.setFromUnitVectors(V(0,1,0),v.normalize());soft(...a,r,r,r,m);soft(...b,r,r,r,m);};
+  // A coat sleeve, glove palm, four fingers and an opposing thumb distinguish the person from the robot.
+  digit([-.91,.23,0],[-.40,.23,0],.11,sleeve);digit([-.40,.23,0],[-.29,.23,0],.075,glove);
+  soft(-.22,.23,0,.15,.12,.075,glove);
+  for(let i=0;i<4;i++){let y=.15+i*.046;digit([-.22,y,.055],[.008,y,.082],.018,glove);digit([.008,y,.082],[.024,y,.062],.019,glove);}
+  digit([-.26,.27,-.055],[-.07,.25,-.085],.026,glove);digit([-.07,.25,-.085],[.01,.235,-.083],.023,glove);
+  d.hand.visible=false;
+  holders.intake=s=>[-10.8+1.8*s.intakeTray,1.23,2.55];
+  holders.externalHand=s=>[s.deliveryX,s.deliveryY,2.55];
+  holders.externalCollected=()=>[-12.65,1.55,2.55];
+  d.pass.traverse(o=>{if(o.isMesh)o.userData.device=d.id;});
+ }
  if(d.type==='hotel'){bench(g,2.9,2.1);for(let x of [-1.3,1.3])box(g,.08,1.6,.09,x,1.96,-.75,M.steel);for(let i=0;i<4;i++){let y=1.28+i*.39;box(g,2.7,.045,1.5,0,y-.045,0,M.steel);for(let j=0;j<2;j++)holders['stock'+(i*2+j)]=()=>local(d,(j?1:-1)*.67,y,.10);}badge(g,'LABWARE','INDEXED HOTEL',0,2.91,.12,.65);}
  d.led=led(g,d.type==='liquid'?1.4:.65);if(d.type==='inc'){d.led.scale.set(.07,38,1);d.led.position.set(1.04,3.36,1.10);}else if(d.type==='counter')d.led.position.set(0,2.57,1.09);else if(d.type==='reader')d.led.position.set(.4,2.14,1.08);else if(d.type==='image')d.led.position.set(.60,2.03,1.12);else if(d.type==='spin')d.led.position.set(.91,1.93,1.46);
- g.traverse(o=>{if(o.isMesh)o.userData.device=id;});
+ if(d.type==='intake')d.led.visible=false;g.traverse(o=>{if(o.isMesh)o.userData.device=id;});
 }
 // Two narrow rails support one carriage and one SCARA transport robot.
 for(let z of [-.23,.23]){box(scene,19,.16,.10,-.3,.20,z,M.steel);box(scene,19,.025,.04,-.3,.295,z,M.dark);}for(let x=-9;x<=9;x+=1.5)box(scene,.30,.21,.80,x,.075,0,M.dark);
@@ -1211,15 +1282,17 @@ function plate(n,color=M.pink){let g=group(scene),cols=n===6?3:n===12?4:n===24?6
  let deck=new THREE.Mesh(new THREE.ExtrudeGeometry(sh,{depth:.030,bevelEnabled:false,curveSegments:24}),plateDeck);deck.rotation.x=-Math.PI/2;deck.position.y=.11;deck.receiveShadow=true;g.add(deck);for(let x of [-.56,.56])box(g,.018,.11,.77,x,.080,0,M.clear);for(let z of [-.385,.385])box(g,1.14,.11,.018,0,.080,z,M.clear);
  let lid=group(g);rounded(lid,1.18,.018,.82,0,.16,0,M.clear,.025);for(let z of [-.4,.4])box(lid,1.18,.055,.014,0,.13,z,M.clear);g.userData={lid,wells,n,cols,rows,height:.17};return g;}
 
-function tube(cryo=false){let g=group(scene),r=cryo?.065:.078,h=cryo?.34:.69;const shell=new THREE.Mesh(new THREE.CylinderGeometry(r,r*.92,h,32,1,true),M.clear);shell.position.y=h/2;g.add(shell);let fluid=cyl(g,r*.87,h*.45,0,h*.30,0,M.pink);if(!cryo)cyl(g,r*.92,.15,0,.025,0,M.clear,0);box(g,r*1.2,h*.38,.006,0,h*.53,r*.99,M.white);let cap=group(g);cyl(cap,r*1.17,.075,0,h+.023,0,cryo?M.amber:M.blue);for(let i=0;i<12;i++){let a=i*Math.PI/6;box(cap,.009,.055,.008,Math.sin(a)*r*1.15,h+.023,Math.cos(a)*r*1.15,M.white);}g.userData={lid:cap,fluid,height:h+.06,tube:true,cryo,r};return g;}
-const META={VIAL:['原冻存管','intake','tube',0],PROC:['细胞处理管','stock6','tube',0],BAL:['登记配平管','stock7','tube',0],REC:['恢复培养板','stock0','plate',6],EXP:['扩增培养板','stock1','plate',6],A:['A板 · 明场 / LDH','stock2','plate',48],B:['B板 · 明场 / ATP','stock3','plate',48],CNT:['第一份专用计数板','stock4','count',24],CNT2:['第二份专用计数板','stock10','count',24],LDH:['LDH检测板','stock5','plate',48],ATP:['ATP检测板','assay:target','plate',48]};
+function tube(cryo=false){let g=group(scene),r=cryo?.065:.049,h=cryo?.34:.69;const shell=new THREE.Mesh(new THREE.CylinderGeometry(r,r*.92,cryo?h:h-.18,32,1,true),M.clear);shell.position.y=cryo?h/2:(h+.18)/2;g.add(shell);let fluid=cyl(g,r*.87,h*.45,0,h*(cryo?.30:.48),0,M.pink);if(!cryo)cyl(g,r*.92,.18,0,.09,0,M.clear,0);box(g,r*1.2,h*.38,.006,0,h*.53,r*.99,M.white);let cap=group(g);cyl(cap,r*1.17,.075,0,h+.023,0,cryo?M.amber:M.blue);for(let i=0;i<12;i++){let a=i*Math.PI/6;box(cap,.009,.055,.008,Math.sin(a)*r*1.15,h+.023,Math.cos(a)*r*1.15,M.white);}g.userData={lid:cap,fluid,height:h+.06,tube:true,cryo,r};return g;}
+const META={VIAL:['原冻存管','externalHand','tube',0],BANK:['待冻存细胞管','bankStock','tube',0],PROC:['细胞处理管','stock6','tube',0],BAL:['登记配平管','stock7','tube',0],REC:['恢复培养板','stock0','plate',6],EXP:['扩增培养板','stock1','plate',6],A:['A板 · 明场 / LDH','stock2','plate',48],B:['B板 · 明场 / ATP','stock3','plate',48],CNT:['第一份专用计数板','stock4','count',24],CNT2:['第二份专用计数板','stock10','count',24],LDH:['LDH检测板','stock5','plate',48],ATP:['ATP检测板','assay:target','plate',48]};
 // Dedicated tube rack and separate used-labware shelf have independent physical supports.
 for(let [id,x]of [['stock6',-1.35],['stock7',-2.08]]){holders[id]=()=>[x,1.30,1.50];box(scene,.27,1.26,.48,x,.63,1.50,M.white);}
 for(let i=8;i<=11;i++){let y=1.30+(i-8)*.31;holders['stock'+i]=()=>[2.05,y,3.45];box(scene,1.25,.04,.92,2.05,y-.04,3.45,M.steel);}for(let x of [1.42,2.68])box(scene,.04,2.3,.04,x,1.13,3.82,M.steel);
 const stockDrawers={};for(let i of [0,1,2,3,4,5,8,9,10,11]){let key='stock'+i,base=holders[key]({}),g=group(scene,...base);box(g,1.17,.028,.83,0,-.018,0,M.dark);holders[key]=s=>[base[0],base[1],base[2]-1.35*(s.stockTrays?.[key]||0)];stockDrawers[key]=g;}
 // Separate supported tube positions avoid assigning conical tubes to flat plate shelves.
 for(let id of ['stock6','stock7']){let p=holders[id]({}),m=M.dark.clone();m.side=THREE.DoubleSide;let cup=new THREE.Mesh(new THREE.CylinderGeometry(.115,.10,.16,24,1,true),m);cup.position.set(p[0],p[1]+.08,p[2]);scene.add(cup);cyl(scene,.10,.02,p[0],p[1]-.01,p[2],M.dark);}
-for(let [id,[name,loc,kind,n]]of Object.entries(META)){let g=kind==='tube'?tube(id==='VIAL'):plate(n,id==='LDH'?M.amber:id==='ATP'?M.blue:M.pink);if(kind==='count'){g.userData.lid.visible=false;for(let q of g.userData.wells)q.material=M.blue;}text(g,id,.32,.065,0,.075,.399,{size:28});g.userData.id=id;items[id]=g;}
+
+for(const [key,x,z]of [['bankStock',-1.0,2.6],['usedVial',-.55,2.6]]){holders[key]=()=>[x,1.30,z];box(scene,.30,1.25,.30,x,.625,z,M.white);const m=M.dark.clone();m.side=THREE.DoubleSide;let q=new THREE.Mesh(new THREE.CylinderGeometry(.09,.085,.09,24,1,true),m);q.position.set(x,1.345,z);scene.add(q);cyl(scene,.085,.012,x,1.294,z,M.dark);}
+for(let [id,[name,loc,kind,n]]of Object.entries(META)){let g=kind==='tube'?tube(id==='VIAL'||id==='BANK'):plate(n,id==='LDH'?M.amber:id==='ATP'?M.blue:M.pink);if(kind==='count'){g.userData.lid.visible=false;for(let q of g.userData.wells)q.material=M.blue;}if(g.userData.tube)text(g,id,.09,.045,0,g.userData.height*.46,g.userData.r+.007,{size:22});else text(g,id,.32,.065,0,.075,.399,{size:28});g.userData.id=id;items[id]=g;}
 const capHolders={},lidHolders={};for(let [id,g]of Object.entries(items)){let f=group(scene);if(g.userData.tube){box(f,.16,.04,.18,0,0,0,M.dark);box(f,.025,.55,.025,.11,-.25,0,M.steel);box(f,.24,.035,.22,.04,-.51,0,M.steel);capHolders[id]=f;}else{for(let x of [-.38,.38]){box(f,.025,.48,.025,x,.22,0,M.steel);box(f,.13,.04,.20,x,0,.03,M.dark);}box(f,.84,.025,.025,0,.43,0,M.steel);lidHolders[id]=f;}f.visible=false;}
 
 for(let d of Object.values(dev)){let p=local(d,.8,.95,-1.04);cable(scene,[p,[p[0],.24,p[2]],[p[0]+.15,.18,d.z+(d.flip?1.35:-1.35)]],.022,M.dark);}
@@ -1227,7 +1300,7 @@ for(let key of ['culture','assay']){let d=dev[key],a=local(d,1.25,1.45,-.62),b=l
 
 holders.robot=s=>[s.robot.x,s.robot.y,s.robot.z];
 function pos(id,s=S){return holders[s.m[id].owner](s);}
-function initial(){let devices={};for(let id in dev)devices[id]={door:0,tray:0,status:'ready'};let m={};for(let [id,meta]of Object.entries(META))m[id]={owner:meta[1],lid:0,cap:0,angle:0,fill:id==='VIAL'||id==='BAL'?.7:0,cells:0,tag:id,terminal:false};let heads={};for(let id of ['culture','assay']){let p=local(dev[id],-1.15,2.5,.15);heads[id]={x:p[0],y:p[1],z:p[2],tip:0,used:0,liquid:0};}return{stockTrays:Object.fromEntries(Object.keys(stockDrawers).map(k=>[k,0])),robot:{cart:-8,x:-8,y:3.2,z:.65,jaw:1,toolOffset:.21,toolHalf:.079,toolFinger:.034},devices,m,heads,lift:local(dev.inc,0,1.33,.4),rotor:0,hatch:0,intakeLid:0,spinning:false,thawLift:0,cellStage:0,readout:0,image:0,decision:'等待任务确认',mode:'准备',flags:{approved:false,id:false,clean:false,balanced:false,spinStopped:true,quality:false,counted:false,capacity:false,predose:false,dosed:false,endpoint:false,readerReady:true,controls:false},source:'VIAL → PROC',pause:false,exposureStart:'待加药',qc:'待观察',route:'原冻存管',done:false};}
+function initial(){let devices={};for(let id in dev)devices[id]={door:0,tray:0,status:'ready'};let m={};for(let [id,meta]of Object.entries(META))m[id]={owner:meta[1],lid:0,cap:0,angle:0,fill:id==='VIAL'||id==='BAL'?.7:0,cells:0,tag:id,terminal:false};let heads={};for(let id of ['culture','assay']){let p=local(dev[id],-1.15,2.5,.15);heads[id]={x:p[0],y:p[1],z:p[2],tip:0,used:0,liquid:0};}return{stockTrays:Object.fromEntries(Object.keys(stockDrawers).map(k=>[k,0])),robot:{cart:-8,x:-8,y:3.2,z:.65,jaw:1,toolOffset:.21,toolHalf:.079,toolFinger:.034},devices,m,heads,lift:local(dev.inc,0,1.33,.4),rotor:0,hatch:0,intakeLid:0,intakeTray:0,outerDoor:0,deliveryX:-12.65,deliveryY:1.55,handVisible:true,bankStatus:'未安排',swing:0,spinning:false,thawLift:0,cellStage:0,readout:0,image:0,decision:'等待任务确认',mode:'准备',flags:{bankReady:false,recipient:false,approved:false,id:false,clean:false,balanced:false,spinStopped:true,quality:false,counted:false,capacity:false,predose:false,dosed:false,endpoint:false,readerReady:true,controls:false},source:'VIAL → PROC',pause:false,exposureStart:'待加药',qc:'待观察',route:'原冻存管',done:false};}
 const guardPredicates={};
 function gateCheck(name,predicate,state=S){return Boolean(predicate(state));}
 function requireGate(name,predicate){guardPredicates[name]=predicate;const ok=gateCheck(name,predicate);guards.push({name,ok,step:raw.length});if(!ok)throw Error('Gate blocked: '+name);}
@@ -1240,10 +1313,41 @@ function changeOwner(id,dest){const a=pos(id),b=holders[dest](S);let delta=Math.
 function transit(x,z,title,id){moveRobot({y:3.45},'先垂直抬离承托面',.6,{material:id});moveRobot({z:Math.sign(z||1)*.60},'夹爪收回中央通行区',.65,{material:id});moveRobot({cart:Math.max(-9,Math.min(9,x)),x},title,.9,{material:id});moveRobot({z},'对准设备交接位置',.7,{material:id});}
 function stockTray(key,out,id){if(!stockDrawers[key])return;add(.8,out?'独立存板托盘完全伸出层架':'独立存板托盘回到登记层位',s=>{s.stockTrays[key]=out?1:0;},{kind:'stock',material:id});}
 
-function spinAccess(key,s){let p=holders[key](s),d=dev.spin,entry=local(d,0,1.37,.56);return s.flags.spinStopped&&!s.spinning&&s.hatch>.999&&Math.abs(p[0]-d.x)<.0001&&Math.abs(p[2]-entry[2])<.0001;}
+
+function passAccess(s){return s.outerDoor===0&&s.intakeLid===1&&s.intakeTray===1;}
+function passOuterAccess(s){return s.intakeLid===0&&s.intakeTray===0&&s.outerDoor===1;}
+function intakePort(out){activeDev='intake';
+ if(out){requireGate('内门开启：外门关闭',s=>s.outerDoor===0);add(1,'打开内门',s=>s.intakeLid=1,{kind:'hatch'});add(1.5,'托盘伸进实验室，露出取管位置',s=>s.intakeTray=1,{kind:'exchange'});}
+ else{requireGate('收回托盘：夹爪已退出',s=>s.robot.y>=3.44||Math.abs(s.robot.z)<1);add(1.5,'托盘沿导轨收回窗内',s=>s.intakeTray=0,{kind:'exchange'});add(1,'关闭内门',s=>s.intakeLid=0,{kind:'hatch'});}
+}
+function outerPort(open){activeDev='intake';requireGate('外门操作：内门关闭且托盘回位',s=>s.intakeLid===0&&s.intakeTray===0);add(1,open?'打开外门':'关闭外门',s=>s.outerDoor=open?1:0,{kind:'outerdoor'});}
+function deliverIncoming(){outerPort(true);requireGate('外侧放管通道就绪',passOuterAccess);
+ add(1.4,'人员把原冻存管送入传递窗',s=>s.deliveryX=-10.8,{kind:'delivery',material:'VIAL'});
+ add(.8,'原冻存管轻放到管座',s=>s.deliveryY=1.23,{kind:'delivery',material:'VIAL'});changeOwner('VIAL','intake');
+ add(1.3,'松手后沿原通道退出',s=>s.deliveryX=-12.65,{kind:'delivery'});add(.3,'手离开外门通道',s=>s.handVisible=false,{kind:'delivery'});outerPort(false);
+}
+function bankingHandoff(){
+ chapter('banking','留存细胞交给人员冻存','culture');
+ decision('实验板接种完成，核对独立留存量与交接安排','bankReady',true);
+ requireGate('冻存交接准备',s=>s.flags.bankReady&&s.flags.quality&&s.flags.counted&&!s.flags.dosed);
+ move('BANK','culture:work');lid('BANK',true);tubeReady('PROC');
+ liquid('culture','PROC','BANK','加药前留存的细胞悬液',{fill:.65,remaining:.10});lid('BANK',false);lid('PROC',false);
+ add(.8,'登记来源、代次与管号，人员接手后进行冻存制备',s=>s.bankStatus='待人员取走',{kind:'check',material:'BANK'});
+ pick('BANK');intakePort(true);place('BANK','intake');intakePort(false);
+ add(1.5,'外侧提示：待冻存细胞已到窗口',s=>{s.devices.intake.status='fault';s.mode='等待交接';},{kind:'exchange',material:'BANK'});
+ decision('人员到位并核对接收管号','recipient',true);
+ requireGate('人员接收放行',s=>s.flags.recipient&&s.m.BANK.cap===0&&s.m.BANK.owner==='intake');outerPort(true);
+ add(.3,'人员从外侧接近窗口',s=>{s.handVisible=true;s.deliveryX=-12.65;s.deliveryY=1.23;},{kind:'delivery'});
+ add(1.4,'手伸入窗口，握住管身',s=>s.deliveryX=-10.8,{kind:'delivery',material:'BANK'});changeOwner('BANK','externalHand');
+ add(.8,'冻存管提离管座',s=>s.deliveryY=1.55,{kind:'delivery',material:'BANK'});
+ add(1.4,'人员取走待冻存细胞',s=>s.deliveryX=-12.65,{kind:'delivery',material:'BANK'});changeOwner('BANK','externalCollected');
+ add(.3,'人员带管离开交接位',s=>s.handVisible=false,{kind:'delivery',material:'BANK'});outerPort(false);
+ add(1.2,'已交接给人员，后续冻存由人员完成',s=>{s.bankStatus='已交接 · 人员负责冻存';s.devices.intake.status='ready';s.mode='执行';},{kind:'check',material:'BANK'});
+}
+function spinAccess(key,s){let p=holders[key](s),d=dev.spin,entry=local(d,0,1.27,.515);return s.swing===0&&s.flags.spinStopped&&!s.spinning&&s.hatch>.999&&Math.abs(p[0]-d.x)<.0001&&Math.abs(p[2]-entry[2])<.0001;}
 function spinClear(s){return Math.abs(s.robot.z)<1&&s.flags.spinStopped&&!s.spinning;}
-function pick(id){if(S.m[id].owner.startsWith('rotor')){let key=S.m[id].owner;requireGate('离心取样：停稳、开口全开、管座对位',s=>spinAccess(key,s));}requireGate('运输前盖好 '+id,s=>s.m[id].lid===0&&s.m[id].cap===0);const source=S.m[id].owner;stockTray(source,true,id);let p=pos(id);transit(p[0],p[2],'导轨臂来到 '+META[id][0],id);moveRobot({y:p[1],jaw:1},'夹爪下降到两侧',.85,{material:id});moveRobot({jaw:0},'夹稳 '+META[id][0],.5,{material:id});changeOwner(id,'robot');moveRobot({y:3.45},'原物垂直提离',.75,{material:id});stockTray(source,false,id);}
-function place(id,dest){if(dest.startsWith('rotor'))requireGate('离心上样：停稳、开口全开、管座对位',s=>spinAccess(dest,s));requireGate('夹持材料 '+id,s=>s.m[id].owner==='robot');stockTray(dest,true,id);let p=holders[dest](S);transit(p[0],p[2],'沿中央导轨搬运 '+META[id][0],id);moveRobot({y:p[1]},'缓慢落入定位巢位',.85,{material:id});changeOwner(id,dest);moveRobot({jaw:1},'承托稳定后松开夹爪',.4,{material:id});moveRobot({y:3.45},'空夹爪垂直退出',.7,{material:id});moveRobot({z:Math.sign(p[2]||1)*.60},'机械臂退出设备作业范围',.7,{material:id});stockTray(dest,false,id);}
+function pick(id){if(S.m[id].owner==='intake')requireGate('内侧取管通道就绪',passAccess);if(S.m[id].owner.startsWith('rotor')){let key=S.m[id].owner;requireGate('离心取样：停稳、开口全开、管座对位',s=>spinAccess(key,s));}requireGate('运输前盖好 '+id,s=>s.m[id].lid===0&&s.m[id].cap===0);const source=S.m[id].owner;stockTray(source,true,id);let p=pos(id);transit(p[0],p[2],'导轨臂来到 '+META[id][0],id);moveRobot({y:p[1],jaw:1},'夹爪下降到两侧',.85,{material:id});moveRobot({jaw:0},'夹稳 '+META[id][0],.5,{material:id});changeOwner(id,'robot');moveRobot({y:3.45},'原物垂直提离',.75,{material:id});stockTray(source,false,id);}
+function place(id,dest){if(dest==='intake')requireGate('内侧放管通道就绪',passAccess);if(dest.startsWith('rotor'))requireGate('离心上样：停稳、开口全开、管座对位',s=>spinAccess(dest,s));requireGate('夹持材料 '+id,s=>s.m[id].owner==='robot');stockTray(dest,true,id);let p=holders[dest](S);transit(p[0],p[2],'沿中央导轨搬运 '+META[id][0],id);moveRobot({y:p[1]},'缓慢落入定位巢位',.85,{material:id});changeOwner(id,dest);moveRobot({jaw:1},'承托稳定后松开夹爪',.4,{material:id});moveRobot({y:3.45},'空夹爪垂直退出',.7,{material:id});moveRobot({z:Math.sign(p[2]||1)*.60},'机械臂退出设备作业范围',.7,{material:id});stockTray(dest,false,id);}
 function port(id,out){activeDev=id;if(out){requireGate('设备就绪 '+id,s=>s.devices[id].status==='ready');add(.8,'设备确认后打开进出口',s=>s.devices[id].door=1,{kind:'door'});add(1,'载台完全伸到仓外',s=>s.devices[id].tray=1,{kind:'tray'});}else{requireGate('机械臂退出 '+id,s=>Math.abs(s.robot.z)<1);add(1,'载台沿导轨回仓',s=>s.devices[id].tray=0,{kind:'tray'});add(.8,'载台到位后关门',s=>s.devices[id].door=0,{kind:'door'});}}
 function putPort(id,device){pick(id);port(device,true);place(id,device);port(device,false);}
 function getPort(id,device){port(device,true);pick(id);moveRobot({z:.60},'原板离开设备载台通道',.7,{material:id});port(device,false);}
@@ -1266,15 +1370,15 @@ function cultureWait(text){activeDev='inc';add(4,text,s=>{s.mode='培养等待';
 function prepareHarvest(id){activeDev='culture';lid(id,true);liquid('culture',id,'waste','旧培养液');liquid('culture','洗涤液',id,'适配洗涤液');liquid('culture',id,'waste','用过的洗涤液');liquid('culture','解离试剂',id,'已确认方法的解离试剂');add(3,'观察到适配的收集状态',s=>{s.m[id].cells=2;},{kind:'wait',material:id});liquid('culture','培养液',id,'收集培养液');tubeReady('PROC');liquid('culture',id,'PROC','同一来源的细胞悬液',{fill:.9});lid(id,false);}
 function build(mode='recovery'){
  scenario=mode;S=initial();raw.length=chapters.length=guards.length=events.length=0;clock=0;holdAt=Infinity;approved=false;
- chapter('task','一管细胞 → 明场与生化损伤检测','intake');decision('方法、物料与设备能力核对完成','approved',true);decision('封闭冻存管身份核对完成','id',true);decision('外表面处理完成，进入受控流程','clean',true);requireGate('任务与样本放行',s=>s.flags.approved&&s.flags.id&&s.flags.clean);
- chapter('thaw','原冻存管无水复苏','thaw');activeDev='intake';add(.8,'接收位上盖打开，留出夹取通道',s=>s.intakeLid=1,{kind:'hatch'});pick('VIAL');add(.8,'原管提出后，接收位上盖关闭',s=>s.intakeLid=0,{kind:'hatch'});activeDev='thaw';transit(dev.thaw.x,dev.thaw.z,'原冻存管来到顶部开口','VIAL');moveRobot({y:1.91},'原管竖直进入复苏孔',1.0,{material:'VIAL'});add(.8,'夹持原管轻压，触发复苏',s=>{s.robot.y=1.86;s.thawLift=-.05;s.devices.thaw.status='busy';},{kind:'thaw',material:'VIAL'});changeOwner('VIAL','thaw');moveRobot({jaw:1},'原管由复苏孔承托，夹爪松开',.5,{material:'VIAL'});moveRobot({y:3.45},'空夹爪垂直退出',.7,{material:'VIAL'});moveRobot({z:.6},'机械臂退出复苏设备',.7,{material:'VIAL'});add(4,'复苏进行中 · 真实等待压缩',()=>{},{kind:'wait'});add(.8,'完成信号确认，原管抬升',s=>{s.thawLift=.08;s.devices.thaw.status='ready';},{kind:'thaw',material:'VIAL'});move('VIAL','culture:work');move('PROC','culture:tube');activeDev='culture';lid('PROC',true);liquid('culture','培养液','PROC','用于稀释的培养液');lid('VIAL',true);liquid('culture','VIAL','PROC','原冻存管内的细胞悬液');lid('VIAL',false);lid('PROC',false);activeDev='intake';add(.8,'接收位上盖打开，接回封闭原管',s=>s.intakeLid=1,{kind:'hatch'});move('VIAL','intake');add(.8,'原管放稳后关闭接收位',s=>s.intakeLid=0,{kind:'hatch'});
- chapter('centrifuge','登记配平组合 → 锁盖 → 停稳取样','spin');decision('样本、适配器和配平组合核对通过','balanced',true);requireGate('离心装载放行',s=>s.flags.balanced&&s.flags.spinStopped);add(.8,'原厂小型上样口打开',s=>s.hatch=1,{kind:'hatch'});move('PROC','rotor0');activeDev='spin';requireGate('转子定位：停稳且机械臂退出',spinClear);add(.9,'转子定位，将对侧承托位转到上样口',s=>s.rotor=Math.PI,{kind:'index'});move('BAL','rotor1');activeDev='spin';requireGate('上样后关门：机械臂退出',spinClear);add(.8,'机械臂退出，上样口关闭并锁定',s=>s.hatch=0,{kind:'hatch'});requireGate('离心运行联锁',s=>s.flags.balanced&&s.hatch===0&&Math.abs(s.robot.z)<1);add(4,'封闭离心 · 真实运行时间压缩',s=>{s.rotor+=Math.PI*16;s.spinning=true;s.flags.spinStopped=false;s.devices.spin.status='busy';},{kind:'spin'});add(1.2,'设备返回停转确认',s=>{s.spinning=false;s.flags.spinStopped=true;s.devices.spin.status='ready';},{kind:'check'});requireGate('停转后开上样口',s=>s.flags.spinStopped&&!s.spinning);add(.8,'停稳后定位到样本管',s=>s.rotor=Math.PI*18,{kind:'index'});add(.8,'小型上样口打开',s=>s.hatch=1,{kind:'hatch'});move('PROC','culture:tube');activeDev='spin';requireGate('取回配平管前定位：停稳且机械臂退出',spinClear);add(.8,'转子定位到配平管',s=>s.rotor=Math.PI*19,{kind:'index'});move('BAL','stock7');activeDev='spin';requireGate('取样后关门：机械臂退出',spinClear);add(.8,'空上样口关闭',s=>s.hatch=0,{kind:'hatch'});
+ chapter('task','一管细胞 → 明场与生化损伤检测','intake');decision('方法、物料与设备能力核对完成','approved',true);deliverIncoming();decision('封闭冻存管身份核对完成','id',true);decision('外表面处理完成，进入受控流程','clean',true);requireGate('任务与样本放行',s=>s.flags.approved&&s.flags.id&&s.flags.clean);
+ chapter('thaw','原冻存管无水复苏','thaw');activeDev='intake';intakePort(true);pick('VIAL');intakePort(false);activeDev='thaw';transit(dev.thaw.x,dev.thaw.z,'原冻存管来到顶部开口','VIAL');moveRobot({y:1.91},'原管竖直进入复苏孔',1.0,{material:'VIAL'});add(.8,'夹持原管轻压，触发复苏',s=>{s.robot.y=1.86;s.thawLift=-.05;s.devices.thaw.status='busy';},{kind:'thaw',material:'VIAL'});changeOwner('VIAL','thaw');moveRobot({jaw:1},'原管由复苏孔承托，夹爪松开',.5,{material:'VIAL'});moveRobot({y:3.45},'空夹爪垂直退出',.7,{material:'VIAL'});moveRobot({z:.6},'机械臂退出复苏设备',.7,{material:'VIAL'});add(4,'复苏进行中 · 真实等待压缩',()=>{},{kind:'wait'});add(.8,'完成信号确认，原管抬升',s=>{s.thawLift=.08;s.devices.thaw.status='ready';},{kind:'thaw',material:'VIAL'});move('VIAL','culture:work');move('PROC','culture:tube');activeDev='culture';lid('PROC',true);liquid('culture','培养液','PROC','用于稀释的培养液');lid('VIAL',true);liquid('culture','VIAL','PROC','原冻存管内的细胞悬液');lid('VIAL',false);lid('PROC',false);move('VIAL','usedVial');
+ chapter('centrifuge','登记配平组合 → 锁盖 → 停稳取样','spin');decision('样本、适配器和配平组合核对通过','balanced',true);requireGate('离心装载放行',s=>s.flags.balanced&&s.flags.spinStopped);add(.8,'原厂小型上样口打开',s=>s.hatch=1,{kind:'hatch'});move('PROC','rotor0');activeDev='spin';requireGate('转子定位：停稳且机械臂退出',spinClear);add(.9,'转子定位，将对侧承托位转到上样口',s=>s.rotor=Math.PI,{kind:'index'});move('BAL','rotor1');activeDev='spin';requireGate('上样后关门：机械臂退出',spinClear);add(.8,'机械臂退出，上样口关闭并锁定',s=>s.hatch=0,{kind:'hatch'});requireGate('离心运行联锁',s=>s.flags.balanced&&s.hatch===0&&Math.abs(s.robot.z)<1);add(4,'封闭离心 · 真实运行时间压缩',s=>{s.rotor+=Math.PI*16;s.swing=Math.PI/2;s.spinning=true;s.flags.spinStopped=false;s.devices.spin.status='busy';},{kind:'spin'});add(1.2,'设备返回停转确认',s=>{s.swing=0;s.spinning=false;s.flags.spinStopped=true;s.devices.spin.status='ready';},{kind:'check'});requireGate('停转后开上样口',s=>s.flags.spinStopped&&!s.spinning);add(.8,'停稳后定位到样本管',s=>s.rotor=Math.PI*18,{kind:'index'});add(.8,'小型上样口打开',s=>s.hatch=1,{kind:'hatch'});move('PROC','culture:tube');activeDev='spin';requireGate('取回配平管前定位：停稳且机械臂退出',spinClear);add(.8,'转子定位到配平管',s=>s.rotor=Math.PI*19,{kind:'index'});move('BAL','stock7');activeDev='spin';requireGate('取样后关门：机械臂退出',spinClear);add(.8,'空上样口关闭',s=>s.hatch=0,{kind:'hatch'});
  chapter('recovery','恢复接种与首次培养','culture');move('REC','culture:work');lid('PROC',true);lid('REC',true);liquid('culture','PROC','waste','离心后上层处理液');liquid('culture','培养液','PROC','恢复培养液');liquid('culture','PROC','PROC','温和重悬的细胞悬液');liquid('culture','PROC','REC','恢复接种细胞',{fill:.75});plateAcross('REC','culture','其余孔按同一方法完成接种',s=>s.m.REC.cells=1);lid('REC',false);lid('PROC',false);incStore('REC',0);cultureWait('恢复培养等待压缩 · 按状态安排观察');incGet('REC',0);imaging('REC','首次明场观察恢复情况',1);decision('恢复检查：继续培养后复查','quality',false);incStore('REC',0);events.push({type:'continued-culture',at:clock});
  if(mode==='review'){activeDev='inc';add(5,'细胞状态进入人工复核，原板保留在培养箱',s=>{s.pause=true;s.mode='待人工复核';s.qc='形态偏离 · 待复核';s.decision='任务暂停，样本保留在登记培养位';},{kind:'manual'});holdAt=clock;add(1,'人工复核通过后恢复观察任务',s=>{s.pause=false;s.mode='执行';},{kind:'approval'});}
  cultureWait('继续培养 · 到复查节点再取板');incGet('REC',0);imaging('REC','再次观察恢复状态',2);decision('复查达到本次演示的放行条件','quality',true);S.qc='恢复检查通过';requireGate('换液前细胞质量',s=>s.flags.quality);
  chapter('feeding','原培养板换液','culture');place('REC','culture:work');lid('REC',true);liquid('culture','REC','waste','旧培养液');liquid('culture','培养液','REC','新的培养液');plateAcross('REC','culture','逐孔完成换液 · 重复操作压缩',()=>{});lid('REC',false);incStore('REC',0);cultureWait('继续培养，随后观察传代状态');incGet('REC',0);imaging('REC','明场检查传代准备情况',2);decision('传代前形态与覆盖检查通过','quality',true);place('REC','culture:work');
  chapter('passage','传代收集与独立计数','culture');prepareHarvest('REC');move('REC','stock8');count('CNT');requireGate('扩增接种依据',s=>s.flags.counted&&s.flags.quality);decision('按可用细胞量安排本次扩增板','capacity',true);move('EXP','culture:work');lid('EXP',true);liquid('culture','PROC','EXP','扩增接种细胞');plateAcross('EXP','culture','完成本次扩增接种',s=>s.m.EXP.cells=1);lid('EXP',false);lid('PROC',false);incStore('EXP',1);cultureWait('扩增培养等待压缩 · 数量与质量共同决定后续');incGet('EXP',1);imaging('EXP','扩增板进入收获前检查',2);place('EXP','culture:work');prepareHarvest('EXP');move('EXP','stock9');count('CNT2');decision('可用细胞量满足两块匹配实验板需求','capacity',true);
- chapter('seeding','两块48孔板 · 分别承担LDH与ATP','culture');requireGate('实验板接种放行',s=>s.flags.capacity&&s.flags.counted&&s.flags.quality);for(let [id,slot]of [['A',2],['B',3]]){move(id,'culture:work');lid(id,true);liquid('culture','PROC',id,'实验板接种细胞',{channels:1});plateAcross(id,'culture','6×8 孔阵列按登记孔图完成接种',s=>s.m[id].cells=1);lid(id,false);incStore(id,slot);}lid('PROC',false);move('PROC','stock6');cultureWait('两块实验板恢复培养 · 等待压缩');for(let [id,slot]of [['A',2],['B',3]]){incGet(id,slot);imaging(id,'保存加药前明场基线 · '+id,3);incStore(id,slot);}decision('两板基线检查通过，准备分组处理','predose',true);
+ chapter('seeding','两块48孔板 · 分别承担LDH与ATP','culture');requireGate('实验板接种放行',s=>s.flags.capacity&&s.flags.counted&&s.flags.quality);for(let [id,slot]of [['A',2],['B',3]]){move(id,'culture:work');lid(id,true);liquid('culture','PROC',id,'实验板接种细胞',{channels:1});plateAcross(id,'culture','6×8 孔阵列按登记孔图完成接种',s=>s.m[id].cells=1);lid(id,false);incStore(id,slot);}bankingHandoff();chapter('baseline','两块实验板的加药前明场','culture');move('PROC','stock6');cultureWait('两块实验板恢复培养 · 等待压缩');for(let [id,slot]of [['A',2],['B',3]]){incGet(id,slot);imaging(id,'保存加药前明场基线 · '+id,3);incStore(id,slot);}decision('两板基线检查通过，准备分组处理','predose',true);
  chapter('dosing','按孔图加药并记录本板处理时间','culture');requireGate('加药前检查',s=>s.flags.predose&&s.flags.capacity);for(let [id,slot]of [['A',2],['B',3]]){incGet(id,slot);place(id,'culture:work');lid(id,true);liquid('culture','登记药物工作液',id,'对应分组的药物或对照',{channels:8});plateAcross(id,'culture','各组使用对应工作液与新吸头 · 重复操作压缩',s=>{s.exposureStart=id+'板处理时间已登记';});lid(id,false);incStore(id,slot);}decision('两板处理完成，各自记录暴露起点','dosed',true);cultureWait('处理培养等待压缩 · 按各板计时到取样节点');decision('本板到达获批方案的终点窗口','endpoint',true);
  chapter('endpoint-images','先拍明场，再进入终点制样','image');requireGate('终点取样放行',s=>s.flags.dosed&&s.flags.endpoint);for(let [id,slot]of [['A',2],['B',3]]){incGet(id,slot);imaging(id,'保存处理后同孔位明场 · '+id,4);place(id,id==='A'?'stock2':'stock3');}
  chapter('ldh','A板上清 → LDH检测板','assay');move('A','assay:work');move('ATP','stock0');move('LDH','assay:target');activeDev='assay';lid('A',true);lid('LDH',true);liquid('assay','A','LDH','A板对应孔的培养上清',{channels:8,remaining:.6});plateAcross('LDH','assay','上清逐孔对应 · 来源记录随样本保留',()=>{});liquid('assay','LDH检测试剂','LDH','适配LDH检测试剂',{channels:8});lid('A',false);lid('LDH',false);move('A','stock2');move('LDH','stock5');activeDev='reader';
@@ -1283,7 +1387,7 @@ function build(mode='recovery'){
  chapter('atp','B板细胞终点 → ATP检测板','assay');move('B','assay:work');move('ATP','assay:target');lid('B',true);lid('ATP',true);liquid('assay','ATP检测试剂','B','适配ATP终点试剂',{channels:8});add(3,'完成终点反应 · 等待压缩',s=>s.m.B.terminal=true,{kind:'wait',material:'B'});liquid('assay','B','ATP','B板对应孔的终点检测液',{channels:8});plateAcross('ATP','assay','独立孔位对应 · 保留分组与来源',()=>{});lid('B',false);lid('ATP',false);move('B','stock3');putPort('ATP','reader');add(3,'读取ATP信号并关联B板来源孔',s=>{s.devices.reader.status='busy';s.readout=2;},{kind:'read',material:'ATP'});add(.5,'ATP读取完成',s=>s.devices.reader.status='ready');getPort('ATP','reader');place('ATP','stock0');
  chapter('results','明场 + LDH + ATP · 合并判断模型内损伤','image');decision('空白、对照与记录完整性检查通过','controls',true,3);requireGate('结果放行',s=>s.flags.controls&&s.readout===2&&s.image===4);add(9,'三类证据连接到同一分组和匹配孔位',s=>{s.done=true;s.mode='完成';s.decision='示例结果已汇总 · 机制研究作为后续任务';},{kind:'results'});
  const factor=450/clock;
- const floor=s=>s.kind==='robot'&&/下降|缓慢落|夹稳|松开/.test(s.title)?.38:({cap:.50,lid:.40,aspirate:.70,dispense:.70,stock:.48,tray:.48,door:.36,handoff:.22,thaw:.80,check:.80,imaging:1.25,results:8,manual:3,fault:2,hold:3}[s.kind]||0);
+ const floor=s=>s.kind==='robot'&&/下降|缓慢落|夹稳|松开/.test(s.title)?.38:({outerdoor:.7,delivery:.65,exchange:.8,hatch:.6,cap:.50,lid:.40,aspirate:.70,dispense:.70,stock:.48,tray:.48,door:.36,handoff:.22,thaw:.80,check:.80,imaging:1.25,results:8,manual:3,fault:2,hold:3}[s.kind]||0);
  const fixed=raw.reduce((n,s)=>n+floor(s),0),flex=raw.filter(s=>!floor(s)).reduce((n,s)=>n+s.end-s.start,0);if(fixed>=450)throw Error('Timing budget exceeded');let at=0;timeline=raw.map(s=>{let d=floor(s)||(s.end-s.start)*(450-fixed)/flex,step={...s,start:at,end:at+d};at+=d;return step;});
  chapters.forEach(c=>{let ss=timeline.filter(s=>s.chapter===c.id);c.start=ss[0].start;c.end=ss.at(-1).end;});holdAt=mode==='review'?timeline.find(s=>s.kind==='manual').end:Infinity;events.forEach(e=>{let ix=raw.findIndex(s=>s.end>=e.at);e.at=timeline[Math.max(0,ix)].end;});duration=450;return timeline;
 }
@@ -1293,7 +1397,7 @@ const COLORS={ready:0x2b5977,busy:0x19bba5,fault:0xe8a132};
 function apply(q){let s=q.state,st=q.step;
  for(let [key,g]of Object.entries(stockDrawers))g.position.set(...holders[key](s));
  for(let [id,d]of Object.entries(dev)){let v=s.devices[id],c=COLORS[v.status]||COLORS.ready;d.led.material.color.setHex(c);d.led.material.emissive.setHex(c);if(d.door){d.door.position.y=1.54+v.door*.51;d.tray.position.z=.4+v.tray*1.35;}if(d.lift)d.lift.position.set(...s.lift);}
- dev.intake.intakeLid.rotation.x=-s.intakeLid*Math.PI*.49;dev.spin.hatch.rotation.x=-s.hatch*Math.PI*.49;dev.spin.rotor.rotation.y=s.rotor;dev.spin.apertureLamp.visible=s.hatch>.8;
+ dev.intake.innerDoor.position.y=1.91+s.intakeLid*1.40;dev.intake.outerDoor.position.y=1.91+s.outerDoor*1.40;dev.intake.passTray.position.x=-10.8+s.intakeTray*1.8;dev.intake.hand.visible=s.handVisible;dev.intake.hand.position.set(s.deliveryX,s.deliveryY,2.55);dev.intake.outLamp.material.color.set(s.bankStatus==='待人员取走'?'#dfa33e':'#5cafa6');dev.spin.hatch.rotation.x=-s.hatch*Math.PI*.49;dev.spin.rotor.rotation.y=s.rotor;dev.spin.buckets.forEach(b=>b.rotation.x=-s.swing);dev.spin.apertureLamp.visible=s.hatch>.8;
 
  const r=s.robot;robot.position.x=r.cart;
  let held=Object.keys(s.m).find(id=>s.m[id].owner==='robot')||st.material,u=items[held]?.userData;
@@ -1308,7 +1412,7 @@ function apply(q){let s=q.state,st=q.step;
  verticalRam.position.set(r.x,(armY+ramBottom)/2,r.z);verticalRam.scale.y=ramHeight;
  let half=r.toolHalf;
  jaws.forEach((g,i)=>{const sign=i?1:-1;g.position.x=sign*(half+r.jaw*.12);g.userData.shank.position.x=sign*r.toolFinger;});
- for(let [id,g]of Object.entries(items)){let m=s.m[id],p=pos(id,s);g.position.set(...p);let u=g.userData;if(u.tube){u.lid.position.set(m.cap*.24,m.cap*.30,0);u.lid.rotation.y=m.angle;u.fluid.scale.y=Math.max(.01,m.fill);u.fluid.visible=m.fill>.01;}else{u.wells.forEach((o,i)=>{o.visible=m.fill>.01;o.scale.y=Math.max(.01,m.fill);});u.lid.position.set(0,m.lid*.52,-m.lid*.62);u.lid.rotation.x=-m.lid*Math.PI*.42;if(META[id][2]==='count')u.lid.visible=false;}}
+ for(let [id,g]of Object.entries(items)){let m=s.m[id],p=pos(id,s);g.position.set(...p);g.visible=m.owner!=='externalCollected';g.rotation.set(0,0,0);if(m.owner.startsWith('rotor')){g.rotation.order='YXZ';g.rotation.y=s.rotor+(m.owner==='rotor1'?Math.PI:0)+(dev.spin.flip?Math.PI:0);g.rotation.x=-s.swing;}let u=g.userData;if(u.tube){u.lid.position.set(m.cap*.24,m.cap*.30,0);u.lid.rotation.y=m.angle;u.fluid.scale.y=Math.max(.01,m.fill);u.fluid.visible=m.fill>.01;}else{u.wells.forEach((o,i)=>{o.visible=m.fill>.01;o.scale.y=Math.max(.01,m.fill);});u.lid.position.set(0,m.lid*.52,-m.lid*.62);u.lid.rotation.x=-m.lid*Math.PI*.42;if(META[id][2]==='count')u.lid.visible=false;}}
  for(let [id,g]of Object.entries(capHolders)){let m=s.m[id],p=pos(id,s);g.visible=m.cap>.95;g.position.set(p[0]+.24,p[1]+items[id].userData.height+.27,p[2]);}for(let [id,g]of Object.entries(lidHolders)){let m=s.m[id],p=pos(id,s);g.visible=m.lid>.95;g.position.set(p[0],p[1]+.14,p[2]-.67);}
  for(let id of ['culture','assay']){let d=dev[id],h=s.heads[id],n=st.station===id?(st.channels||1):Math.round(h.tip)||1,offset=n===8?.424375:.060625;d.head.position.set(h.x+offset,h.y+.06,h.z);d.tips.forEach((tip,i)=>{tip.visible=h.tip>.4&&(n===8||i===3);d.fluids[i].visible=tip.visible&&h.liquid>.15;});d.rackTips.forEach((tip,i)=>tip.visible=i>=Math.round(h.used)%96);d.rail.position.x=h.x;d.zstage.position.set(h.x,(3.10+h.y+.8)/2,h.z);d.zstage.scale.y=Math.max(.05,3.10-h.y-.8);
  d.capTool.visible=st.kind==='cap'&&st.device===id;d.lidTool.visible=st.kind==='lid'&&st.device===id;if(d.capTool.visible){let p=pos(st.material,s),u=items[st.material].userData,m=s.m[st.material];d.capTool.position.set(p[0]+m.cap*.24,p[1]+u.height+m.cap*.30,p[2]);}if(d.lidTool.visible){let p=pos(st.material,s),m=s.m[st.material];d.lidTool.position.set(p[0],p[1]+.20+m.lid*.52,p[2]-m.lid*.62);}}
@@ -1335,7 +1439,7 @@ function deviceClip(id){
   first=doors.find(s=>s.to.devices[id].door===1);
   last=doors.filter(s=>s.start>=first.start&&s.to.devices[id].door===0)[1];
  }else if(id==='intake'){
-  const a=timeline.filter(s=>s.device==='intake'&&s.kind==='hatch');[first,last]=a;
+  first=timeline.find(s=>s.kind==='outerdoor');last=timeline.find(s=>s.chapter==='thaw'&&s.kind==='hatch'&&s.to.intakeLid===0);
  }else if(id==='thaw'){
   first=timeline.find(s=>s.chapter==='thaw'&&s.device==='thaw');
   const i=timeline.findIndex(s=>s.fromOwner==='thaw'&&s.toOwner==='robot');last=timeline[i+1];
@@ -1358,15 +1462,15 @@ function exitDeviceDemo(){
  const saved=deviceDemo;deviceDemo=null;running=false;currentTime=saved.returnTime;
  $('approve').style.display=saved.approvalDisplay;document.body.classList.remove('device-demo');
 }
-function startDeviceDemo(id){
- exitDeviceDemo();const returnTime=currentTime;focus(id);const clip=deviceClip(id);
+function startDeviceDemo(id,banking=false){
+ exitDeviceDemo();const returnTime=currentTime;focus(id);let clip=deviceClip(id);if(banking){let ss=timeline.filter(s=>s.chapter==='banking'&&s.device==='intake'),first=ss[0],last=ss.at(-1);clip={id,start:first.start,end:last.end,rate:.50};}
  deviceDemo={...clip,returnTime,approvalDisplay:$('approve').style.display,position:camera.position.toArray(),target:controls.target.toArray(),fov:camera.fov};
  following=false;freeBrowse=false;running=true;currentTime=clip.start;
  $('inspector').style.display='none';$('approve').style.display='none';document.body.classList.remove('browsing');document.body.classList.add('device-demo');
  frame(currentTime);return {...clip};
 }
 function drawDeviceDemo(q){
- const d=dev[deviceDemo.id];round(24,76,430,64,'#f7fcf7ef');txt(d.n+' / '+d.name,40,102,18,'#19434b',600);txt('固定近景 · 本机操作完成后返回全局',40,125,12,'#5c7882');
+ const d=dev[deviceDemo.id];round(24,76,430,64,'#f7fcf7ef');txt(d.n+' / '+d.name,40,102,18,'#19434b',600);txt(film?'固定近景 · 设备与交接动作示意':'固定近景 · 本机操作完成后返回全局',40,125,12,'#5c7882');
  round(24,758,1552,74,'#f8fcf8f2');txt(q.step.kind==='dispense'&&q.step.target==='waste'?'把吸出的液体排入废液口':q.step.title,42,788,17,'#234553',500);
  const id=q.step.material;if(id&&META[id])txt(META[id][0],42,814,12,'#5c7882');
  const elapsed=(currentTime-deviceDemo.start)/deviceDemo.rate,total=(deviceDemo.end-deviceDemo.start)/deviceDemo.rate;
@@ -1390,13 +1494,13 @@ function applyPremiumEnvironment(){
  const grid=new THREE.GridHelper(80,80,0x244655,0x1b3545);grid.position.y=-.215;grid.material.transparent=true;grid.material.opacity=.28;scene.add(grid);
 }
 function premiumMilestones(){
- if(!deviceDemo){const labels=['任务确认','细胞复苏','离心处理','恢复培养','换液','传代计数','接种','分组加药','明场观察','LDH检测','ATP检测','结果'];return chapters.map((c,i)=>({time:c.start,label:labels[i]||c.title}));}
+ if(!deviceDemo){const labels=['任务与进管','细胞复苏','离心处理','恢复培养','换液','传代计数','接种','冻存交接','明场基线','分组加药','明场观察','LDH检测','ATP检测','结果'];return chapters.map((c,i)=>({time:c.start,label:labels[i]||c.title}));}
  const id=deviceDemo.id,ss=timeline.filter(s=>s.start>=deviceDemo.start-1e-6&&s.end<=deviceDemo.end+1e-6),out=[];
  const add=(s,label)=>{if(s&&!out.some(v=>v.time===s.start))out.push({time:s.start,label});};
  if(['inc','count','image','reader'].includes(id)){
   let d=ss.filter(s=>s.kind==='door');add(d[0],'开仓接板');add(ss.find(s=>s.toOwner===id),'放板就位');add(d[1],'回仓处理');add(d[2],'开仓取板');add(ss.find(s=>s.fromOwner===id&&s.toOwner==='robot'),'取出原板');add(d[3],'关门结束');
  }else{
-  const labels={hatch:'开合上样口',thaw:'原管复苏',spin:'封闭离心',lid:'取放原盖',cap:'取放管盖',aspirate:'吸取液体',dispense:'分配液体',stock:'伸缩存板托盘',handoff:'交接材料'};
+  const labels={outerdoor:'外门开合',exchange:'托盘与交接',delivery:'人员取放',hatch:'开合上样口',thaw:'原管复苏',spin:'封闭离心',lid:'取放原盖',cap:'取放管盖',aspirate:'吸取液体',dispense:'分配液体',stock:'伸缩存板托盘',handoff:'交接材料'};
   let events=ss.filter(s=>labels[s.kind]);let chosen=events.length<=6?events:Array.from({length:6},(_,i)=>events[Math.round(i*(events.length-1)/5)]);
   for(let s of chosen){let label=s.kind==='handoff'?(s.toOwner==='robot'?'夹取材料':'放稳材料'):s.kind==='dispense'&&s.target==='waste'?'排入废液口':labels[s.kind];add(s,label);}
  }
@@ -1406,13 +1510,13 @@ function syncPremium(q){
  const active=!!deviceDemo||!freeBrowse,strip=$('operation-strip');strip.style.display=active?'block':'none';
  const task=$('task-panel');task.style.display=!freeBrowse&&!deviceDemo?'block':'none';
  if(!freeBrowse&&!deviceDemo){$('task-mode').textContent=q.state.mode;$('task-image').textContent=q.state.image>=3?'已记录':'等待采集';$('task-biochem').textContent=q.state.readout>1?'LDH / ATP 已读取':q.state.readout?'LDH 已读取':'等待采集';Array.from($('mini-wells').children).forEach((n,i)=>{let c=i%8,v=c===0?.12:c===1?.85:c===7?0:.15+(c-2)*.16;n.style.background=q.state.flags.dosed?`hsl(${170-v*145},42%,${54-v*15}%)`:'#213b47';});}
- $('scene-status').textContent=deviceDemo?dev[deviceDemo.id].name+' · '+(running?'局部演示':'局部暂停'):selected?dev[selected].name+' · 仪器近景':freeBrowse?'自由浏览 · 10 台设备':'主线演示 · '+q.state.mode;
+ $('bank-status').textContent='冻存交接：'+q.state.bankStatus;$('scene-status').textContent=deviceDemo?dev[deviceDemo.id].name+' · '+(running?'局部演示':'局部暂停'):selected?dev[selected].name+' · 仪器近景':freeBrowse?'自由浏览 · 10 台设备':'主线演示 · '+q.state.mode;
  if(!active)return;
  $('operation-context').textContent=deviceDemo?dev[deviceDemo.id].n+' / '+dev[deviceDemo.id].name:'CELL WORKFLOW';
  let title=q.step.title;if(q.step.kind==='dispense'&&q.step.target==='waste')title='把吸出的液体排入废液口';
  if(q.step.kind==='door')title=q.step.to.devices[q.step.device].door===1?'打开仓门，准备交接':'关闭仓门，完成交接';
  if(q.step.kind==='tray')title=q.step.to.devices[q.step.device].tray===1?'托盘伸出，等待机械臂取放':'托盘沿导轨收回仓内';
- if(q.step.kind==='handoff'){let name=items[q.step.material]?.userData.tube?'试管':'培养板';title=q.step.toOwner==='robot'?'夹爪夹稳，取起'+name:q.step.toOwner==='lift'?name+'交给内部托架':name+'放稳，完成交接';}
+ if(q.step.kind==='handoff'&&q.step.fromOwner!=='externalHand'&&q.step.toOwner!=='externalHand'&&q.step.toOwner!=='externalCollected'){let name=items[q.step.material]?.userData.tube?'试管':'培养板';title=q.step.toOwner==='robot'?'夹爪夹稳，取起'+name:q.step.toOwner==='lift'?name+'交给内部托架':name+'放稳，完成交接';}
  $('operation-title').textContent=title;
  let key=(deviceDemo?deviceDemo.id+':'+deviceDemo.start:scenario+':main');
  if(key!==premiumKey){premiumKey=key;premiumSteps=premiumMilestones();$('milestones').replaceChildren();premiumSteps.forEach((s,i)=>{let b=document.createElement('button'),n=document.createElement('span');n.textContent=String(i+1).padStart(2,'0');b.append(n,document.createTextNode(s.label));b.dataset.time=s.time;b.onclick=()=>{running=false;following=!deviceDemo;frame(deviceDemo?Math.min(deviceDemo.end-.00001,s.time+.00001):s.time+.00001);};$('milestones').append(b);});}
@@ -1425,7 +1529,7 @@ function premiumResult(){
 function drawDeviceNumbers(){for(let [id,d]of Object.entries(dev)){let p=project([d.x,d.type==='inc'?4.65:2.95,d.z]);if(p.visible){round(p.x-14,p.y-14,28,28,id===selected?'#84dfce':'#102f40ec',14);txt(d.n,p.x-8,p.y+5,12,id===selected?'#103336':'#b5dedf',600);}}}
 function repaint(){if(currentQ){renderer.render(scene,camera);overlay(currentQ);}}
 function enterBrowse(){freeBrowse=true;running=false;following=false;document.body.classList.add('browsing');$('play').textContent=deviceDemo?'继续局部':'播放主线';}
-function overlay(q){ctx.setTransform(hud.width/W,0,0,hud.height/H,0,0);ctx.clearRect(0,0,W,H);let s=q.state,st=q.step,ch=chapters.find(c=>c.id===st.chapter);const film=document.body.classList.contains('film');let top=film?22:74;if(!film){syncPremium(q);if(freeBrowse&&!deviceDemo)drawDeviceNumbers();if(!freeBrowse&&!deviceDemo&&q.step.kind==='results')premiumResult();return;}if(!film&&deviceDemo){drawDeviceDemo(q);return;}if(!film&&freeBrowse){drawDeviceNumbers();return;}
+function overlay(q){ctx.setTransform(hud.width/W,0,0,hud.height/H,0,0);ctx.clearRect(0,0,W,H);let s=q.state,st=q.step,ch=chapters.find(c=>c.id===st.chapter);const film=document.body.classList.contains('film');let top=film?22:74;if(!film){syncPremium(q);if(freeBrowse&&!deviceDemo)drawDeviceNumbers();if(!freeBrowse&&!deviceDemo&&q.step.kind==='results')premiumResult();return;}if(deviceDemo){drawDeviceDemo(q);return;}if(!film&&freeBrowse){drawDeviceNumbers();return;}
  round(24,top,530,64,'#f8fcf7e8');txt('CELL ATELIER  /  CORE LAB',40,top+23,12,'#407d7e',600);txt(ch?.title||'',40,top+49,18,'#163c48',500);
  ctx.save();ctx.translate(1576*(1-.70),22*(1-.70));ctx.scale(.70,.70);
  round(1285,22,291,254,'#153a46ed');txt('任务状态',1302,48,14,'#b3e6db',600);txt('演示数据 · 状态输入为模拟',1302,68,11,'#bdd0d7');let stateName=s.mode;txt(stateName,1302,98,24,s.devices.reader.status==='fault'||s.pause?'#efbc68':'#e5f5f0',600);txt('HepG2  /  单批任务',1302,124,13,'#c0d8dd');txt(s.flags.counted?'计数活率 93.1% · 示例值':'计数结果：等待采集',1302,149,13,'#dae9ec');txt(s.exposureStart,1302,173,12,'#bfd4dc');line(1302,187,1557,187,'#42606a');txt('明场',1302,212,11,'#c6d6dd');txt(s.image>=3?'已记录':'待采集',1382,212,12,'#e2f0ec');txt('LDH / ATP',1302,240,11,'#c6d6dd');txt(s.readout>1?'已读取 / 已读取':s.readout?'已读取 / 待采集':'待采集 / 待采集',1382,240,11,'#e2f0ec');
@@ -1438,16 +1542,19 @@ function overlay(q){ctx.setTransform(hud.width/W,0,0,hud.height/H,0,0);ctx.clear
  let y=film?814:778;round(24,y,1552,film?64:56,'#f8fcf8f4');let alert=st.kind==='fault'||st.kind==='hold'||st.kind==='manual';round(38,y+12,5,30,alert?'#d59a38':'#279c8c',3);txt(st.title,57,y+26,16,'#234553',500);txt(s.decision,57,y+49,11,'#5c7882');txt(timeStr(currentTime)+' / '+timeStr(duration),1431,y+29,13,'#426772');txt(['wait','repeat','spin'].includes(st.kind)?'等待 / 重复操作压缩':'三维结构与动作示意',1405,y+48,10,'#6e8790');ctx.fillStyle='#2ba18e';ctx.fillRect(24,y+(film?67:59),1552*currentTime/duration,3);
 }
 function resize(){let w=innerWidth,h=innerHeight;renderer.setSize(w,h);hud.width=w;hud.height=h;camera.aspect=w/h;camera.updateProjectionMatrix();repaint();}addEventListener('resize',resize);resize();
-function overview(){exitDeviceDemo();enterBrowse();following=false;selected=null;$('inspector').style.display='none';camera.position.set(17,16,21);controls.target.set(0,1.2,0);camera.lookAt(controls.target);frame(currentTime);}
-function focus(id){exitDeviceDemo();enterBrowse();following=false;selected=id;let d=dev[id],q=viewFor({step:{device:id},state:currentQ.state});if(id==='reader')q.position.x=d.x-3.3;if(id==='spin'){q.position=V(-4.4,8.4,.6);q.target=V(-3.5,1.95,2.84);}if(d.type==='inc')q.position.sub(q.target).multiplyScalar(1.3).add(q.target);camera.position.copy(q.position);controls.target.copy(q.target);camera.lookAt(controls.target);$('inspector').innerHTML=`<small>${d.n} / ${zones[d.zone].name}</small><h2>${d.name}</h2><p>${d.about}</p><small>${d.ref}<br>结构参考与机器人适配示意</small><p><button id="device-play">查看这台仪器的动作</button></p>`;$('inspector').style.display='block';$('device-play').onclick=()=>startDeviceDemo(id);frame(currentTime);}
+
+let spinSection=false;
+function setSpinSection(on){spinSection=!!on;for(const root of [dev.spin.shell,dev.spin.hatch])root.traverse(o=>{if(!o.isMesh)return;if(!o.userData.solidMaterial)o.userData.solidMaterial=o.material;if(on){if(!o.userData.sectionMaterial){let m=o.material.clone();m.transparent=true;m.opacity=.10;m.depthWrite=false;o.userData.sectionMaterial=m;}o.material=o.userData.sectionMaterial;}else o.material=o.userData.solidMaterial;});}
+function overview(){$('equipment-list').value='';setSpinSection(false);exitDeviceDemo();enterBrowse();following=false;selected=null;$('inspector').style.display='none';camera.position.set(17,16,21);controls.target.set(0,1.2,0);camera.lookAt(controls.target);frame(currentTime);}
+function focus(id){$('equipment-list').value=id;setSpinSection(false);exitDeviceDemo();enterBrowse();following=false;selected=id;let d=dev[id],q=viewFor({step:{device:id},state:currentQ.state});if(id==='intake'){q.position=V(-14.0,6.5,9.2);q.target=V(-10.25,1.8,2.4);}if(id==='reader')q.position.x=d.x-3.3;if(id==='spin'){q.position=V(-4.4,8.4,.6);q.target=V(-3.5,1.95,2.84);}if(d.type==='inc')q.position.sub(q.target).multiplyScalar(1.3).add(q.target);camera.position.copy(q.position);controls.target.copy(q.target);camera.lookAt(controls.target);$('inspector').innerHTML=`<small>${d.n} / ${zones[d.zone].name}</small><h2>${d.name}</h2><p>${d.about}</p><small>${d.ref}<br>结构参考与机器人适配示意</small><p><button id="device-play">查看这台仪器的动作</button></p>`;$('inspector').style.display='block';$('device-play').onclick=()=>startDeviceDemo(id);if(id==='intake'){let b=document.createElement('button');b.id='bank-demo';b.textContent='查看人员取走待冻存细胞';b.onclick=()=>startDeviceDemo('intake',true);$('inspector').append(b);}if(id==='spin'){let b=document.createElement('button');b.id='spin-section';b.textContent='查看转子内部结构';b.onclick=()=>{setSpinSection(!spinSection);b.textContent=spinSection?'恢复完整外壳':'查看转子内部结构';repaint();};$('inspector').append(b);}frame(currentTime);}
 
 const SHOTS={
- receiving:{position:[-1,11.5,16],target:[-4,1.5,0]},
+ receiving:{position:[-3,11.5,17],target:[-6.4,1.5,.4]},
  culture:{position:[5,10,13.5],target:[-1,1.7,-.7]},
  assay:{position:[11.5,10.5,15],target:[4,1.6,0]},
  results:{position:[17,16,21],target:[0,1.2,0]}
 };
-function shotName(ch){return ['task','thaw','centrifuge'].includes(ch)?'receiving':['ldh','atp'].includes(ch)?'assay':ch==='results'?'results':'culture';}
+function shotName(ch){return ['task','thaw','centrifuge','banking'].includes(ch)?'receiving':['ldh','atp'].includes(ch)?'assay':ch==='results'?'results':'culture';}
 function setShot(ch){let v=SHOTS[shotName(ch)];camera.position.fromArray(v.position);controls.target.fromArray(v.target);camera.lookAt(controls.target);}
 
 function frame(time,opts={}){let capped=!deviceDemo&&scenario==='review'&&!approved&&time>=holdAt;if(capped){time=holdAt-.0001;running=false;lastHold=true;$('approve').style.display='block';}currentTime=Math.max(0,Math.min(duration-.000001,time));let q=sample(currentTime);currentQ=q;apply(q);if(opts.follow!==undefined)following=opts.follow;if(deviceDemo){following=false;camera.position.fromArray(deviceDemo.position);controls.target.fromArray(deviceDemo.target);camera.lookAt(controls.target);}else if(following){freeBrowse=false;document.body.classList.remove('browsing');setShot(q.step.chapter);}controls.update();renderer.render(scene,camera);overlay(q);$('seek').disabled=!!selected&&!deviceDemo;$('seek').min=deviceDemo?deviceDemo.start:0;$('seek').max=deviceDemo?deviceDemo.end:duration;$('seek').value=currentTime;$('time').textContent=deviceDemo?timeStr((currentTime-deviceDemo.start)/deviceDemo.rate)+' / '+timeStr((deviceDemo.end-deviceDemo.start)/deviceDemo.rate):timeStr(currentTime)+' / '+timeStr(duration);$('play').textContent=deviceDemo?(running?'暂停局部':'继续局部'):(selected?'演示此仪器':running?'暂停':'播放主线');return q;}
@@ -1467,9 +1574,9 @@ function navigationMode(pan){enterBrowse();controls.mouseButtons.LEFT=pan?THREE.
 $('nav-rotate').onclick=()=>navigationMode(false);$('nav-pan').onclick=()=>navigationMode(true);
 function zoomView(f){enterBrowse();let offset=camera.position.clone().sub(controls.target),distance=THREE.MathUtils.clamp(offset.length()*f,controls.minDistance,controls.maxDistance);camera.position.copy(controls.target).add(offset.setLength(distance));controls.update();repaint();}
 $('nav-in').onclick=()=>zoomView(.82);$('nav-out').onclick=()=>zoomView(1/.82);
-hud.style.pointerEvents='none';$('home').onclick=()=>{running=false;overview();};$('follow').onclick=()=>{exitDeviceDemo();selected=null;running=true;following=true;$('inspector').style.display='none';frame(currentTime);};$('play').onclick=()=>{if(selected&&!deviceDemo){startDeviceDemo(selected);return;}running=!running;following=!deviceDemo;$('inspector').style.display='none';frame(currentTime);};$('restart').onclick=()=>{if(selected&&!deviceDemo){startDeviceDemo(selected);return;}if(deviceDemo){currentTime=deviceDemo.start;running=true;frame(currentTime);return;}approved=false;lastHold=false;$('approve').style.display='none';currentTime=0;running=true;following=true;frame(0);};$('seek').oninput=e=>{running=false;following=!deviceDemo;frame(deviceDemo?Math.min(deviceDemo.end-.00001,Math.max(deviceDemo.start,+e.target.value)):+e.target.value);};$('scenario').onchange=e=>{exitDeviceDemo();build(e.target.value);currentTime=0;running=false;$('approve').style.display='none';overview();};$('approve').onclick=()=>{if(scenario==='review'&&lastHold){approved=true;lastHold=false;$('approve').style.display='none';currentTime=holdAt+.0001;running=true;following=true;events.push({type:'explicit-human-release',at:currentTime});}};
+const equipment=$('equipment-list');for(const [id,d]of Object.entries(dev)){const o=document.createElement('option');o.value=id;o.textContent=d.n+' '+d.name;equipment.append(o);}equipment.onchange=()=>{if(equipment.value)focus(equipment.value);};hud.style.pointerEvents='none';$('home').onclick=()=>{running=false;overview();};$('follow').onclick=()=>{exitDeviceDemo();selected=null;running=true;following=true;$('inspector').style.display='none';frame(currentTime);};$('play').onclick=()=>{if(selected&&!deviceDemo){startDeviceDemo(selected);return;}running=!running;following=!deviceDemo;$('inspector').style.display='none';frame(currentTime);};$('restart').onclick=()=>{if(selected&&!deviceDemo){startDeviceDemo(selected);return;}if(deviceDemo){currentTime=deviceDemo.start;running=true;frame(currentTime);return;}approved=false;lastHold=false;$('approve').style.display='none';currentTime=0;running=true;following=true;frame(0);};$('seek').oninput=e=>{running=false;following=!deviceDemo;frame(deviceDemo?Math.min(deviceDemo.end-.00001,Math.max(deviceDemo.start,+e.target.value)):+e.target.value);};$('scenario').onchange=e=>{exitDeviceDemo();build(e.target.value);currentTime=0;running=false;$('approve').style.display='none';overview();};$('approve').onclick=()=>{if(scenario==='review'&&lastHold){approved=true;lastHold=false;$('approve').style.display='none';currentTime=holdAt+.0001;running=true;following=true;events.push({type:'explicit-human-release',at:currentTime});}};
 const film=new URLSearchParams(location.search).has('film');if(film)document.body.classList.add('film');else applyPremiumEnvironment();build('recovery');overview();
 function tick(now){let dt=Math.min(.1,(now-last)/1000);last=now;advancePlayback(dt);requestAnimationFrame(tick);}requestAnimationFrame(tick);
-window.CORE={ready:true,spinAccess,spinClear,spinGeometry:()=>({shell:dev.spin.shell,hatch:dev.spin.hatch,rotor:dev.spin.rotor,wrist,jaws,ram:verticalRam,links:[link1,link2],items}),deviceClip,startDeviceDemo,advancePlayback,navigationState:()=>({freeBrowse,running,following,selected,time:currentTime,deviceDemo:deviceDemo?{id:deviceDemo.id,start:deviceDemo.start,end:deviceDemo.end,rate:deviceDemo.rate,returnTime:deviceDemo.returnTime}:null}),deviceScreen:()=>Object.fromEntries(Object.entries(dev).map(([id,d])=>[id,project([d.x,d.type==='inc'?4.65:2.95,d.z])])),cameraState:()=>({position:camera.position.toArray(),target:controls.target.toArray(),quaternion:camera.quaternion.toArray(),fov:camera.fov}),frame:(t,opts={})=>frame(t,{follow:true,...opts}),overview,focus,scenario(mode){exitDeviceDemo();build(mode);currentTime=0;running=false;frame(0);return{holdAt};},approve(){ $('approve').click();running=false;},inspect:sample,catalog(){return{duration,chapters:clone(chapters),steps:timeline.map(({from,to,...s})=>s),guards:clone(guards),events:clone(events),scenario,holdAt:Number.isFinite(holdAt)?holdAt:null};},state:()=>clone(currentQ.state),materials:()=>Object.entries(items).map(([id])=>({id,owner:currentQ.state.m[id].owner,position:pos(id,currentQ.state)})),dimensions:()=>Object.fromEntries(Object.entries(items).filter(([id,g])=>g.userData.wells).map(([id,g])=>[id,{wells:g.userData.n,rows:g.userData.rows,cols:g.userData.cols}])),capture(t){frame(t,{follow:true});const c=document.createElement('canvas');c.width=W;c.height=H;let k=c.getContext('2d');k.drawImage(renderer.domElement,0,0,W,H);k.drawImage(hud,0,0,W,H);return c;},pos,gateCheck,evaluateGate:(name,state)=>guardPredicates[name](state),guards,meta:META,devices:DEFS};
+window.CORE={ready:true,passAccess,passOuterAccess,setSpinSection,exchangeGeometry:()=>({intake:dev.intake,items}),spinAccess,spinClear,spinGeometry:()=>({shell:dev.spin.shell,hatch:dev.spin.hatch,rotor:dev.spin.rotor,buckets:dev.spin.buckets,wrist,jaws,ram:verticalRam,links:[link1,link2],items}),deviceClip,startDeviceDemo,advancePlayback,navigationState:()=>({freeBrowse,running,following,selected,time:currentTime,deviceDemo:deviceDemo?{id:deviceDemo.id,start:deviceDemo.start,end:deviceDemo.end,rate:deviceDemo.rate,returnTime:deviceDemo.returnTime}:null}),deviceScreen:()=>Object.fromEntries(Object.entries(dev).map(([id,d])=>[id,project([d.x,d.type==='inc'?4.65:2.95,d.z])])),cameraState:()=>({position:camera.position.toArray(),target:controls.target.toArray(),quaternion:camera.quaternion.toArray(),fov:camera.fov}),frame:(t,opts={})=>frame(t,{follow:true,...opts}),overview,focus,scenario(mode){exitDeviceDemo();build(mode);currentTime=0;running=false;frame(0);return{holdAt};},approve(){ $('approve').click();running=false;},inspect:sample,catalog(){return{duration,chapters:clone(chapters),steps:timeline.map(({from,to,...s})=>s),guards:clone(guards),events:clone(events),scenario,holdAt:Number.isFinite(holdAt)?holdAt:null};},state:()=>clone(currentQ.state),materials:()=>Object.entries(items).map(([id])=>({id,owner:currentQ.state.m[id].owner,position:pos(id,currentQ.state)})),dimensions:()=>Object.fromEntries(Object.entries(items).filter(([id,g])=>g.userData.wells).map(([id,g])=>[id,{wells:g.userData.n,rows:g.userData.rows,cols:g.userData.cols}])),capture(t){frame(t,{follow:true});const c=document.createElement('canvas');c.width=W;c.height=H;let k=c.getContext('2d');k.drawImage(renderer.domElement,0,0,W,H);k.drawImage(hud,0,0,W,H);return c;},pos,gateCheck,evaluateGate:(name,state)=>guardPredicates[name](state),guards,meta:META,devices:DEFS};
 })();
 </script></body></html>
